@@ -198,7 +198,13 @@ function C.search(port, address, options)
         if options.f then
           msg = "Connecting to [%s]"
         end
-        io.write(string.format(msg, remote_address), "\n")
+        if psh.dns == true then
+          local resolve = require("resolve")
+          os.sleep(.5)
+          io.write(string.format(msg, remote_address), " --- ", string.format("%s", resolve.rlookup(remote_address)), "\n")
+        else
+          io.write(string.format(msg, remote_address), "\n")
+        end
       end
       if options.f then
         break
