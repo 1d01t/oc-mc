@@ -1,3 +1,4 @@
+local psh = require("psh")
 local component = require("component")
 local thread = require("thread")
 local uuid = require("uuid")
@@ -381,6 +382,12 @@ function S.connect(remote_address, port, local_address)
   checkArg(2, port, "number")
   checkArg(3, local_address, "string", "nil")
 
+  if psh.dns == true then
+    local resolve = require("resolve")
+--    os.sleep(.5)
+    remote_address = resolve.lookup(remote_address)
+  end
+  
   local handle, socket = prepare_client_socket(local_address, port, remote_address)
   send(socket, PACKET.connect)
 
